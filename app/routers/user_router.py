@@ -4,8 +4,10 @@ from app.models.credential import Credential as CredentialModel
 from app.schemas.user import UserCreate, UserResponse
 from app.database import SessionLocal
 from app.utils.auth import get_current_user
+from app.rabbitmq.RabbitMQHelper import RabbitMQHelper
 import pika
 import json
+import kombu
 
 router = APIRouter()
 
@@ -40,6 +42,11 @@ def create_user(user: UserCreate):
 
         # Enviar el mensaje JSON a la cola
         channel.basic_publish(exchange='', routing_key='nuevo_usuario', body=user_json)
+
+        rabbitmq_helper = RabbitMQHelper()
+        rabbitmq_helper.declare_queues(['hello'])
+        rabbitmq_helper.send_message('hello', 'Hello, World!')
+        rabbitmq_helper.close_connection()
 
         return new_user
     finally:
