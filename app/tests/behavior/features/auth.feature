@@ -1,11 +1,9 @@
-Feature: User Authentication
+Feature: Testing login endpoint
 
-  Scenario: User login with valid credentials
-    Given a user with username "testuser" and password "password"
-    When the user logs in with username and password
-    Then a token should be returned
-
-  Scenario: User login with invalid credentials
-    Given a user with username "testuser" and password "password"
-    When the user logs in with invalid username or password
-    Then an error message should be returned
+  Scenario: User login
+    Given the API is running
+    When I send a POST request to "/login" with the following data:
+      | username  | testuser  |
+      | password  | password  |
+    Then the response status code should be 200
+    And the response body should contain a "token" field

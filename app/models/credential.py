@@ -8,3 +8,10 @@ class Credential(Base):
     username = Column(String, unique=True)
     password = Column(String)
     rol = Column(Enum("cliente", "empleado", "administrador"))
+
+    def to_dict(self):
+        return {
+            "username": self.username,
+            "password": self.password,
+            "rol": self.rol,
+        }

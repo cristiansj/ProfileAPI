@@ -4,13 +4,13 @@ from app.routers.routers import router
 import pika
 
 # Importar las funciones necesarias desde el archivo consumer.py
-from app.consumer import callback, pedido, connection_params, queue_name
+#from app.consumer import callback, pedido, connection_params, queue_name
 
 app = FastAPI()
 app.include_router(router)
 
 # Crear la función start_consumer para conectar y consumir mensajes de RabbitMQ
-async def start_consumer():
+'''async def start_consumer():
     connection = pika.BlockingConnection(connection_params)
     channel = connection.channel()
 
@@ -21,4 +21,4 @@ async def start_consumer():
     await loop.run_in_executor(None, channel.start_consuming)
 
 # Llamar a la función start_consumer en la función main
-start_consumer()
+start_consumer()'''

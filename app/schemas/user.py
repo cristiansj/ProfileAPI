@@ -16,6 +16,12 @@ class Credential(CredentialBase):
     class Config:
         orm_mode = True
 
+class CredentialUpdate(BaseModel):
+    id: str
+    username: str
+    password: str
+    rol: str
+
 class UserBase(BaseModel):
     id: str
     nombre: str
@@ -34,3 +40,13 @@ class User(UserBase):
 
 class UserResponse(User):
     pass
+
+class UserUpdate(UserBase):
+    id: str
+    nombre: str
+    apellido: str
+    correo: str
+    credential: CredentialUpdate
+
+    class Config:
+        orm_mode = True

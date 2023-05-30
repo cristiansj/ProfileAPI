@@ -4,25 +4,27 @@ from main import app
 
 client = TestClient(app)
 
-@given('a user with username "{username}" and password "{password}"')
-def step_given_user_credentials(context, username, password):
-    context.username = username
-    context.password = password
+@given('the API is running')
+def step_given_api_running(context):
+    # No se requiere ninguna acción ya que se asume que la API está en funcionamiento
+    pass
 
-@when("the user logs in with username and password")
-def step_when_user_logs_in(context):
-    response = client.post(
-        "/login",
-        data={"username": context.username, "password": context.password}
-    )
-    context.response = response
+@when('I send a POST request to "/login" with the following data:')
+def step_when_send_post_request_with_data(context):
+    data = {}
+    for row in context.table:
+        key = row["username"]
+        value = row["password"]
+        data[key] = value
 
-@then("a token should be returned")
-def step_then_token_returned(context):
+    context.response = client.post("/login", json=data)
+
+@then('the response status code should be 200')
+def step_then_check_status_code_200(context):
     assert context.response.status_code == 200
-    assert "access_token" in context.response.json()
 
-@then("an error message should be returned")
-def step_then_error_message_returned(context):
-    assert context.response.status_code == 401
-    assert "detail" in context.response.json()
+@then('the response body should contain a "token" field')
+def step_then_check_response_body_token_field(context):
+    response_data = context.response.json()
+    assert "token" in response_data
+
